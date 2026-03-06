@@ -1,12 +1,12 @@
 package koroler.TThotels.entity;
 
 import java.time.LocalTime;
-import java.util.Map;
 import java.util.Set;
 
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,6 +17,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,11 +45,10 @@ public class Hotel {
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "address", columnDefinition = "OTHER")
-    private Map<String, Object> address;
+    private Address address;
 
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "contact", columnDefinition = "OTHER")
-    private Map<String, Object> contact;
+    @OneToOne(mappedBy = "hotel", cascade = CascadeType.PERSIST)
+    private ContactInfo contactInfo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "city_id")
@@ -67,4 +67,13 @@ public class Hotel {
         inverseJoinColumns = @JoinColumn(name = "amenities_id")
     )
     private Set<Amenity> amenities;
+    
+    
+    @Getter
+    @Setter
+    public static class Address {
+    	private Integer houseNumber;
+    	private String street;
+    	private String postcode;
+    }
 }

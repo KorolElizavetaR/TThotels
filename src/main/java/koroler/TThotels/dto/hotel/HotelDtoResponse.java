@@ -1,4 +1,4 @@
-package koroler.TThotels.dto;
+package koroler.TThotels.dto.hotel;
 
 import lombok.Data;
 

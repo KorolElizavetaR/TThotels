@@ -20,7 +20,8 @@ public class ContactInfo {
     @Column(name = "email")
     private String email;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hotel_id")
+    @OneToOne
+    @JoinColumn(name = "hotel_id", nullable = false)
     private Hotel hotel;
+
 }

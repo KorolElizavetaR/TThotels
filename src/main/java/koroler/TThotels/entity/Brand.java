@@ -8,6 +8,8 @@ import java.util.UUID;
 @Table(name = "brand")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Brand {
 
     @Id
@@ -17,4 +19,8 @@ public class Brand {
 
     @Column(name = "brand_name")
     private String brandName;
+    
+    public Brand(String brandName) {
+    	this.brandName = brandName;
+    }
 }

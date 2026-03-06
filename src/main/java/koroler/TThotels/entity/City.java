@@ -7,6 +7,7 @@ import lombok.*;
 @Table(name = "city")
 @Getter
 @Setter
+@NoArgsConstructor
 public class City {
 
     @Id
@@ -17,7 +18,11 @@ public class City {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "country_id")
     private Country country;
+    
+    public City(String name) {
+    	this.name = name;
+    }
 }

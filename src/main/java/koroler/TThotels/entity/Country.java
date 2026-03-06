@@ -7,6 +7,7 @@ import lombok.*;
 @Table(name = "country")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Country {
 
     @Id
@@ -16,4 +17,8 @@ public class Country {
 
     @Column(name = "name")
     private String name;
+    
+    public Country (String name) {
+    	this.name = name;
+    }
 }
