@@ -19,6 +19,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,7 +37,7 @@ public class Hotel {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "description", nullable = false)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -44,10 +45,10 @@ public class Hotel {
     private Brand brand;
 
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "address", columnDefinition = "OTHER")
+    @Column(name = "address")
     private Address address;
 
-    @OneToOne(mappedBy = "hotel", cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)
     private ContactInfo contactInfo;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -69,8 +70,7 @@ public class Hotel {
     private Set<Amenity> amenities;
     
     
-    @Getter
-    @Setter
+    @Data
     public static class Address {
     	private Integer houseNumber;
     	private String street;

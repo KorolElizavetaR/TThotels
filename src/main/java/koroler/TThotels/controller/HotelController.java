@@ -25,14 +25,12 @@ public class HotelController {
 	
 	@GetMapping("/hotels")
 	public List<HotelDtoResponse> getHotels() {
-		/// TODO
-		return null;
+		return hotelService.getHotels();
 	}
 	
 	@GetMapping("/hotels/{id}")
 	public HotelDtoGetFullResponse getHotel(@PathVariable Long id) {
-		/// TODO
-		return null;
+		return hotelService.getHotelById(id);
 	}
 	
 	@PostMapping("/hotels")

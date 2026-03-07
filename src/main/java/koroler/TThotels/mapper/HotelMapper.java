@@ -7,9 +7,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
+import koroler.TThotels.dto.address.AddressDto;
+import koroler.TThotels.dto.contact.ContactsDto;
+import koroler.TThotels.dto.hotel.HotelDtoGetFullResponse;
 import koroler.TThotels.dto.hotel.HotelDtoRequest;
 import koroler.TThotels.dto.hotel.HotelDtoResponse;
-import koroler.TThotels.dto.hotel.HotelDtoRequest.ContactsDto;
 import koroler.TThotels.entity.ContactInfo;
 import koroler.TThotels.entity.Hotel;
 
@@ -26,6 +28,13 @@ public interface HotelMapper {
     @Mapping (target = "address", ignore = true)
     @Mapping(target ="phone", source="contactInfo.phone")
     HotelDtoResponse toDto(Hotel entity);
+
+    @Mapping(target = "brand", source="brand.brandName")
+    @Mapping(target = "contacts", source = "hotel.contactInfo")
+    @Mapping(target = "arrivalTime.checkIn", source = "hotel.checkIn")
+    @Mapping(target = "arrivalTime.checkOut", source = "hotel.checkOut")
+    @Mapping(target = "amenities", ignore = true)
+    HotelDtoGetFullResponse toDtoFull(Hotel hotel);
     
     /// "address": "9 Pobediteley Avenue, Minsk, 220004, Belarus",
     @AfterMapping
@@ -45,5 +54,8 @@ public interface HotelMapper {
     ContactInfo toEntity(ContactsDto dto);
 
     @Mapping(target="postcode", source="postCode")
-    Hotel.Address mapAddress(HotelDtoRequest.AddressDto addressDto);
+    Hotel.Address mapAddress(AddressDto addressDto);
+    
+    @Mapping(target="postCode", source="postcode")
+    AddressDto mapAddressToDto(Hotel.Address entity);
 }
