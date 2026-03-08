@@ -1,9 +1,11 @@
 package koroler.TThotels.params;
 
+import org.jspecify.annotations.Nullable;
+
 public record HotelParams (
-	String name,
-	String brand,
-	String city, 
-	String country, 
-	String[] amenities
+	@Nullable String name,
+	@Nullable String brand,
+	@Nullable String city, 
+	@Nullable String country, 
+	@Nullable String[] amenities
 ) {}

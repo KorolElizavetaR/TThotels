@@ -3,6 +3,7 @@ package koroler.TThotels.controller;
 import java.util.HashMap;
 import java.util.List;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,9 +43,8 @@ public class HotelController {
 	@Operation(
 			summary = "получение списка отелей по параметрам",
 			description = "поиск получение списка всех отелей с их краткой информацией по следующим параметрам: name, brand, city, country, amenities. ")
-	public List<HotelDtoResponse> getHotelByParams(HotelParams params) {
-		//TODO: impl
-		return null;
+	public List<HotelDtoResponse> getHotelByParams(@ParameterObject HotelParams params) {
+		return hotelService.getHotelByParams(params);
 	}
 	
 	@PostMapping("/hotels")

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityNotFoundException;
+import koroler.TThotels.HotelSpecification;
 import koroler.TThotels.dto.hotel.HotelDtoGetFullResponse;
 import koroler.TThotels.dto.hotel.HotelDtoRequest;
 import koroler.TThotels.dto.hotel.HotelDtoResponse;
@@ -13,6 +14,7 @@ import koroler.TThotels.entity.Brand;
 import koroler.TThotels.entity.City;
 import koroler.TThotels.entity.Hotel;
 import koroler.TThotels.mapper.HotelMapper;
+import koroler.TThotels.params.HotelParams;
 import koroler.TThotels.repository.HotelRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +47,15 @@ public class HotelService {
                 .orElseThrow(() -> new EntityNotFoundException("Hotel not found with id: " + id));
         return hotelMapper.toDtoFull(hotel);
     }
+    
+    @Transactional(readOnly = true)
+    public List<HotelDtoResponse> getHotelByParams(HotelParams params) {
+		HotelSpecification spec = new HotelSpecification(params);
+		List<Hotel> hotels = hotelRepository.findAll(spec);
+		return hotels.stream()
+				.map(hotelMapper::toDto)
+				.toList();
+	}
 
     @Transactional
     public HotelDtoResponse createHotel(HotelDtoRequest dto) {
