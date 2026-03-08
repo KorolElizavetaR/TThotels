@@ -1,7 +1,7 @@
 package koroler.TThotels.controller;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +16,7 @@ import jakarta.validation.Valid;
 import koroler.TThotels.dto.hotel.HotelDtoGetFullResponse;
 import koroler.TThotels.dto.hotel.HotelDtoRequest;
 import koroler.TThotels.dto.hotel.HotelDtoResponse;
+import koroler.TThotels.params.GroupingFactor;
 import koroler.TThotels.params.HotelParams;
 import koroler.TThotels.service.HotelService;
 import lombok.RequiredArgsConstructor;
@@ -63,8 +64,7 @@ public class HotelController {
 	@Operation(
 			summary = "получение кол-ва отелей сгруппированных по каждому значению",
 			description = "получение количества отелей сгруппированных по каждому значению указанного параметра. Параметр: brand, city, country, amenities.")
-	public HashMap<String, Integer> getHistogram(@PathVariable String groupingFactor) {
-		//TODO: impl
-		return null;
+	public Map<String, Integer> getHistogram(@PathVariable GroupingFactor param) {
+		return hotelService.getHistogram(param);
 	}
 }

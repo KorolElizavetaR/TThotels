@@ -2,6 +2,7 @@ package koroler.TThotels.service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import jakarta.persistence.EntityNotFoundException;
-import koroler.TThotels.HotelSpecification;
 import koroler.TThotels.dto.hotel.HotelDtoGetFullResponse;
 import koroler.TThotels.dto.hotel.HotelDtoRequest;
 import koroler.TThotels.dto.hotel.HotelDtoResponse;
@@ -17,9 +17,12 @@ import koroler.TThotels.entity.Amenity;
 import koroler.TThotels.entity.Brand;
 import koroler.TThotels.entity.City;
 import koroler.TThotels.entity.Hotel;
+import koroler.TThotels.entity.projection.HotelCountProjection;
 import koroler.TThotels.mapper.HotelMapper;
+import koroler.TThotels.params.GroupingFactor;
 import koroler.TThotels.params.HotelParams;
 import koroler.TThotels.repository.HotelRepository;
+import koroler.TThotels.spec.HotelSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -86,8 +89,22 @@ public class HotelService {
     	hotel.getAmenities().addAll(amenityEntities);
     	hotelRepository.save(hotel);
     }
-    
-    public HashMap<String, Integer> getHistogram(String groupingFactor) {
     	
+    @Transactional(readOnly = true)
+    public Map<String, Integer> getHistogram(GroupingFactor groupingFactor) {
+        List<HotelCountProjection> projections =
+	        switch (groupingFactor) {
+	            case brand ->  hotelRepository.countByBrand();
+	            case city ->  hotelRepository.countByCity();
+	            case country ->  hotelRepository.countByCountry();
+	            case amenities ->  hotelRepository.countByAmenity();
+	            default -> throw new IllegalArgumentException("Unknown grouping factor: " + groupingFactor);
+	        };
+        
+        Map<String, Integer> result = new HashMap<>();
+        for (HotelCountProjection projection : projections) {
+            result.put(projection.getGroupingValue(), projection.getHotelCount().intValue());
+        }
+        return result;
     }
 }

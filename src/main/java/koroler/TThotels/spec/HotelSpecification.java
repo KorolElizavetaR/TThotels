@@ -1,4 +1,4 @@
-package koroler.TThotels;
+package koroler.TThotels.spec;
 
 import org.springframework.data.jpa.domain.Specification;
 
