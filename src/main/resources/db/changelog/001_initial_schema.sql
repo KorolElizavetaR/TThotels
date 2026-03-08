@@ -17,7 +17,7 @@ CREATE TABLE city (
 CREATE TABLE hotel (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    description TEXT NOT NULL,
+    description TEXT NULL,
     brand_id UUID NOT NULL REFERENCES brand(id),
     address JSON,
     city_id BIGINT REFERENCES city(id),

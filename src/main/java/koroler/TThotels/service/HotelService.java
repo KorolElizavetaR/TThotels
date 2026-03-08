@@ -59,6 +59,7 @@ public class HotelService {
     @Transactional(readOnly = true)
     public List<HotelDtoResponse> getHotelByParams(HotelParams params) {
 		HotelSpecification spec = new HotelSpecification(params);
+		
 		List<Hotel> hotels = hotelRepository.findAll(spec);
 		return hotels.stream()
 				.map(hotelMapper::toDto)

@@ -47,6 +47,7 @@ import lombok.Setter;
 	        )
 	    }
 	)
+
 public class Hotel {
 
     @Id
@@ -57,7 +58,7 @@ public class Hotel {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)

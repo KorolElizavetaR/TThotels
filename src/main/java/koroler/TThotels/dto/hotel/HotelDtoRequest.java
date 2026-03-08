@@ -1,5 +1,7 @@
 package koroler.TThotels.dto.hotel;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import koroler.TThotels.dto.address.AddressDto;
 import koroler.TThotels.dto.arrival.ArrivalTimeDto;
@@ -10,7 +12,8 @@ import lombok.Data;
 public class HotelDtoRequest {
 	@NotBlank
     private String name;
-	@NotBlank
+	@Nullable
+	@Schema(nullable = true)
     private String description;
 	@NotBlank
     private String brand;
