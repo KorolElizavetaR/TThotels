@@ -1,6 +1,8 @@
 package koroler.TThotels.service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +18,7 @@ public class AmenitiesService {
 	private final AmenitiesRepository amenitiesRepository;
 	
 	@Transactional
-	public List<Amenity> findOrCreateAll(List<String> names) {  
+	public Set<Amenity> findOrCreateAll(List<String> names) {  
 		/**
 		 * Можно было бы сделать немного круче.
 		 * 1) Найти batch-операцией все уже имеющиеся в бд amenities
@@ -25,6 +27,6 @@ public class AmenitiesService {
 		 */
         return names.stream()                                                                                                                                                            
             .map(amenitiesRepository::findOrCreateByName)                                                                                                     
-            .toList();                                                                                                                                                                   
+            .collect(Collectors.toSet());                                                                                                                                                                   
     }  
 }

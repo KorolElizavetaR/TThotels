@@ -3,6 +3,7 @@ package koroler.TThotels.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,10 +42,9 @@ public class HotelService {
 
     @Transactional(readOnly = true)
     public List<HotelDtoResponse> getHotels() {
-    	List <Hotel> hotels =  hotelRepository.findAll();
-    	log.debug("example hotel address: {}", hotels.getFirst().getAddress());
+    	List <Hotel> hotels = hotelRepository.findAll();
     	
-        return hotelRepository.findAll().stream()
+        return hotels.stream()
                 .map(hotelMapper::toDto)
                 .toList();
     }
@@ -85,8 +85,8 @@ public class HotelService {
     @Transactional
     public void addAmenitiesToHotel(@RequestBody List<String> amenities, @PathVariable Long id) {
     	Hotel hotel = hotelRepository.findById(id).orElseThrow();
-    	List<Amenity> amenityEntities = amenitiesService.findOrCreateAll(amenities);
-    	hotel.getAmenities().addAll(amenityEntities);
+    	Set<Amenity> amenityEntities = amenitiesService.findOrCreateAll(amenities);
+    	hotel.setAmenities(amenityEntities);
     	hotelRepository.save(hotel);
     }
     	

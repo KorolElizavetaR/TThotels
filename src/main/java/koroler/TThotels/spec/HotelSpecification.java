@@ -1,15 +1,23 @@
 package koroler.TThotels.spec;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import org.springframework.data.jpa.domain.Specification;
 
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Subquery;
+import koroler.TThotels.entity.Amenity;
 import koroler.TThotels.entity.Hotel;
 import koroler.TThotels.params.HotelParams;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class HotelSpecification implements Specification<Hotel> {
 
 	private String name;
@@ -69,11 +77,19 @@ public class HotelSpecification implements Specification<Hotel> {
 		if (amenities == null || amenities.length == 0) {
 			return cb.conjunction();
 		}
-		Predicate[] predicates = new Predicate[amenities.length];
-		for (int i = 0; i < amenities.length; i++) {
-			predicates[i] = cb.equal(root.get("amenities").get("name"), amenities[i]);
-		}
-		return cb.and(predicates);
+		log.debug("amenities: {}", 
+			    Arrays.stream(amenities).collect(Collectors.joining(", ")));
+		Subquery<Long> subquery = query.subquery(Long.class);
+	    Root<Hotel> subRoot = subquery.from(Hotel.class);
+	    Join<Hotel, Amenity> amenityJoin = subRoot.join("amenities");
+
+	    subquery.select(cb.countDistinct(amenityJoin.get("id")))
+	            .where(
+	                cb.equal(subRoot.get("id"), root.get("id")),
+	                amenityJoin.get("name").in(Arrays.asList(amenities))
+	            );
+
+	    return cb.equal(subquery, (long) amenities.length);
 	}
 
 }

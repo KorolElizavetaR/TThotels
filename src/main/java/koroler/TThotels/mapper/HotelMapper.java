@@ -12,6 +12,7 @@ import koroler.TThotels.dto.contact.ContactsDto;
 import koroler.TThotels.dto.hotel.HotelDtoGetFullResponse;
 import koroler.TThotels.dto.hotel.HotelDtoRequest;
 import koroler.TThotels.dto.hotel.HotelDtoResponse;
+import koroler.TThotels.entity.Amenity;
 import koroler.TThotels.entity.ContactInfo;
 import koroler.TThotels.entity.Hotel;
 
@@ -55,6 +56,11 @@ public interface HotelMapper {
     	AddressDto addressDto = dto.getAddress();
     	addressDto.setCity(hotel.getCity().getName());
     	addressDto.setCountry(hotel.getCity().getCountry().getName());
+    }
+    
+    @AfterMapping
+    default void toAmenitiesListDto(@MappingTarget HotelDtoGetFullResponse dto, Hotel hotel) {
+    	dto.setAmenities(hotel.getAmenities().stream().map(Amenity::getName).toList());
     }
     
     /// TODO: вынести в отдельный маппер
