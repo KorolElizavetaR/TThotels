@@ -33,7 +33,7 @@ CREATE TABLE contact_info (
 
 CREATE TABLE amenities (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
+    name VARCHAR(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE amenities_hotel (

@@ -1,15 +1,19 @@
 package koroler.TThotels.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import jakarta.persistence.EntityNotFoundException;
 import koroler.TThotels.HotelSpecification;
 import koroler.TThotels.dto.hotel.HotelDtoGetFullResponse;
 import koroler.TThotels.dto.hotel.HotelDtoRequest;
 import koroler.TThotels.dto.hotel.HotelDtoResponse;
+import koroler.TThotels.entity.Amenity;
 import koroler.TThotels.entity.Brand;
 import koroler.TThotels.entity.City;
 import koroler.TThotels.entity.Hotel;
@@ -28,8 +32,9 @@ public class HotelService {
     
     private final BrandService brandService;
     private final GeoService geoService;
+    private final AmenitiesService amenitiesService;
     
-    private final HotelRepository hotelRepository;
+    private final HotelRepository hotelRepository; 
 
     @Transactional(readOnly = true)
     public List<HotelDtoResponse> getHotels() {
@@ -72,5 +77,17 @@ public class HotelService {
         HotelDtoResponse resp = hotelMapper.toDto(hotel);
 
         return resp;
+    }
+    
+    @Transactional
+    public void addAmenitiesToHotel(@RequestBody List<String> amenities, @PathVariable Long id) {
+    	Hotel hotel = hotelRepository.findById(id).orElseThrow();
+    	List<Amenity> amenityEntities = amenitiesService.findOrCreateAll(amenities);
+    	hotel.getAmenities().addAll(amenityEntities);
+    	hotelRepository.save(hotel);
+    }
+    
+    public HashMap<String, Integer> getHistogram(String groupingFactor) {
+    	
     }
 }

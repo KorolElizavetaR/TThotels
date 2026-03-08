@@ -55,15 +55,15 @@ public class HotelController {
 	
 	@PostMapping("/hotels/{id}/amenities")
 	@Operation(summary = "добавление списка amenities к отелю")
-	public void addAmenitiesToHotel(@RequestBody String amenities) {
-		//TODO: impl
+	public void addAmenitiesToHotel(@RequestBody List<String> amenities, @PathVariable Long id) {
+		hotelService.addAmenitiesToHotel(amenities, id);
 	}
 	
 	@GetMapping("/histogram/{param}")
 	@Operation(
 			summary = "получение кол-ва отелей сгруппированных по каждому значению",
-			description = "получение колличества отелей сгруппированных по каждому значению указанного параметра. Параметр: brand, city, country, amenities.")
-	public HashMap<String, Integer> getHotelsAmountGrouped(@PathVariable String groupingFactor) {
+			description = "получение количества отелей сгруппированных по каждому значению указанного параметра. Параметр: brand, city, country, amenities.")
+	public HashMap<String, Integer> getHistogram(@PathVariable String groupingFactor) {
 		//TODO: impl
 		return null;
 	}
