@@ -19,6 +19,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedAttributeNode;
 import jakarta.persistence.NamedEntityGraph;
+import jakarta.persistence.NamedSubgraph;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -33,8 +34,17 @@ import lombok.Setter;
 	    name = "Hotel.withDetails",
 	    attributeNodes = {
 	        @NamedAttributeNode("brand"),
-	        @NamedAttributeNode("city"),
-	        @NamedAttributeNode("amenities")
+	        @NamedAttributeNode(value = "city", subgraph = "city-with-country"),
+	        @NamedAttributeNode("amenities"),
+	        @NamedAttributeNode("contactInfo")
+	    },
+	    subgraphs = {
+	        @NamedSubgraph(
+	            name = "city-with-country",
+	            attributeNodes = {
+	                @NamedAttributeNode("country")
+	            }
+	        )
 	    }
 	)
 public class Hotel {
