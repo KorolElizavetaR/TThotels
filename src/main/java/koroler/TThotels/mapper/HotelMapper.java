@@ -50,6 +50,13 @@ public interface HotelMapper {
     	dto.setAddress(addressFormated);
     }
     
+    @AfterMapping
+    default void toAddressDto(@MappingTarget HotelDtoGetFullResponse dto, Hotel hotel) {
+    	AddressDto addressDto = dto.getAddress();
+    	addressDto.setCity(hotel.getCity().getName());
+    	addressDto.setCountry(hotel.getCity().getCountry().getName());
+    }
+    
     /// TODO: вынести в отдельный маппер
     ContactInfo toEntity(ContactsDto dto);
 

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.persistence.EntityNotFoundException;
 import koroler.TThotels.dto.hotel.HotelDtoGetFullResponse;
 import koroler.TThotels.dto.hotel.HotelDtoRequest;
 import koroler.TThotels.dto.hotel.HotelDtoResponse;
@@ -40,8 +41,8 @@ public class HotelService {
 
     @Transactional(readOnly = true)
     public HotelDtoGetFullResponse getHotelById(Long id) {
-        Hotel hotel = hotelRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Hotel not found with id: " + id));
+        Hotel hotel = hotelRepository.findByIdFetchEager(id)
+                .orElseThrow(() -> new EntityNotFoundException("Hotel not found with id: " + id));
         return hotelMapper.toDtoFull(hotel);
     }
 
